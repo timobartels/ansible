@@ -26,10 +26,9 @@ color_echo(){
   echo
 }
 
-echo $PATH
+echo "DEBUG lines"
 which kitchen
 whoami
-pwd
 
 export roles_path="`pwd`/roles"
 export changed_roles=`ls $roles_path`
