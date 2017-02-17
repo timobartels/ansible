@@ -26,7 +26,7 @@ color_echo(){
   echo
 }
 
-echo "DEBUG lines"
+echo "DEBUG lines new"
 which kitchen
 whoami
 
