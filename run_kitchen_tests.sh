@@ -1,4 +1,4 @@
-#!/bin/sh
+/bin/sh
 
 export black="0;30"
 export dark_gray="1;30"
@@ -25,6 +25,11 @@ color_echo(){
   color_echo_no_crlf $1 "$2"
   echo
 }
+
+echo $PATH
+which kitchen
+whoami
+pwd
 
 export roles_path="`pwd`/roles"
 export changed_roles=`ls $roles_path`
