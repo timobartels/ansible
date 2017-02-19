@@ -1,0 +1,58 @@
+---
+- set_fact: env_constraint="{{ marathon_env_constraint }}"
+
+- name: Determining the enviroment to deploy
+  set_fact: env_constraint="dev"
+  when: (marathon_env_constraint != "qa") and (marathon_env_constraint != "prod")
+
+- name: Define default deployment constraints
+  set_fact: deployment_constraint=[]
+
+- name: Add deployment constraint
+  set_fact: 
+    deployment_constraint:
+      - [ 'environment', 'LIKE', '{{ env_constraint }}' ]
+      - [ 'hostname', 'GROUP_BY', '2' ]
+  when: marathon_url == marathon_prod_url
+
+- name: Deploy application in marathon
+  marathon_deploy:
+    url: "{{ marathon_url }}"
+    user: "{{ marathon_user }}"
+    password: "{{ marathon_password }}"
+    app_config:
+      id: '{{ marathon_id }}'
+      container:
+        type: DOCKER
+        volumes: '{{ marathon_volumes }}'
+        docker:
+          image: '{{ marathon_image }}'
+          network: "BRIDGE"
+          portMappings:
+            - containerPort: '{{ marathon_container_port }}'
+              hostPort: 0
+              servicePort: '{{ marathon_service_port }}'
+              protocol: 'tcp'
+              labels: {}
+          priviledged: false
+          parameters: '{{ marathon_docker_parameters }}'
+          forcePullImage: false
+      instances: '{{ marathon_instances }}'
+      cpus: '{{ marathon_cpus }}'
+      mem: '{{ marathon_mem }}'
+      labels: "{{ marathon_labels }}"
+      env: '{{ marathon_env }}'
+      constraints: '{{ deployment_constraint }}'
+      health_checks:
+      - protocol: HTTP
+        path: '{{ marathon_healthcheck_path }}'
+        portIndex: 0
+        timeoutSeconds: 10
+        gracePeriodSeconds: 300
+        intervalSeconds: 20
+        maxConsecutiveFailures: 10
+      upgrade_strategy:
+        minimum_health_capacity: '{{ marathon_min_health_capacity }}'
+        maximum_over_capacity: '{{ marathon_max_over_capacity }}'
+  no_log: true
+  changed_when: false

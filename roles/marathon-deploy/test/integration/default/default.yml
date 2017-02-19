@@ -1,0 +1,6 @@
+---
+- hosts: kitchen
+  tasks:
+  - name: Debug
+    debug: msg="Test successful"
+ 

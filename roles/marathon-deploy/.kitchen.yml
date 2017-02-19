@@ -10,7 +10,10 @@ provisioner:
   ansible_verbosity: 2
   roles_path: "../../roles"
   ansible_vault_password_file: ../../vault-key
-  
+  modules_path: "../../library"
+  env_vars:
+    TEST_ENV: prod
+
 platforms:
   - name: centos-7.2
     driver_config:

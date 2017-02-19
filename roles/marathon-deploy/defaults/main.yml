@@ -1,0 +1,18 @@
+marathon_id: "nginx"
+marathon_image: "nginx:latest"
+marathon_service_port: 10005
+marathon_instances: 2
+marathon_container_port: 80
+marathon_cpus: 0.1
+marathon_mem: 128
+marathon_url: http://192.168.56.11
+marathon_prod_url: https://192.168.56.11
+marathon_labels:
+  HAPROXY_GROUP: external
+marathon_volumes: []
+marathon_docker_parameters: []
+marathon_env: {}
+marathon_healthcheck_path: /
+marathon_min_health_capacity: 0
+marathon_max_over_capacity: 0
+marathon_env_constraint: prod
