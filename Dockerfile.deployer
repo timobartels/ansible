@@ -1,0 +1,24 @@
+FROM centos:7
+
+MAINTAINER Timo Bartels <timo@bartels-online.net>
+
+USER root
+
+RUN yum install -y epel-release \
+    && yum install -y curl openssh-clients rsync python-setuptools python-pip pyYAML python-jinja2 python-httplib2 ansible \
+    && yum clean all
+
+RUN pip install netaddr
+RUN pip install requests
+RUN pip install marathon
+RUN pip install jsonschema
+RUN pip install pyvmomi
+RUN pip install pexpect
+
+RUN mkdir /ansible
+COPY roles /ansible/roles
+COPY library /ansible/library
+COPY infra /ansible/infra
+COPY deployer/ansible.cfg /ansible/ansible.cfg
+
+WORKDIR /ansible
